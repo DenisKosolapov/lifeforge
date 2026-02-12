@@ -34,9 +34,8 @@ services:
       - PB_DIR=/pb_data
       - PB_HOST=http://0.0.0.0:8090
     volumes:
+      # Оставляем только базу данных, код берется из образа
       - ./database/pb_data:/pb_data
-      # УДАЛЕНО: - ./apps:/app/apps
-      # УДАЛЕНО: - ./locales:/app/locales
     restart: "no"
     depends_on:
       db:
@@ -56,10 +55,7 @@ services:
       - PB_HOST=http://db:8090
     expose:
       - "3636"
-    volumes:
-      # УДАЛЕНО: - ./apps:/lifeforge/apps
-      # УДАЛЕНО: - ./locales:/lifeforge/locales
-      # Оставляем этот блок пустым или удаляем совсем, если больше нечего монтировать
+    # Блок volumes полностью удален, так как он был пуст
     depends_on:
       db-init:
         condition: service_completed_successfully
