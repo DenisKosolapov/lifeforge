@@ -32,9 +32,10 @@ services:
     environment:
       - DOCKER_MODE=true
       - PB_DIR=/pb_data
+      # Используем 0.0.0.0, так как init запускает свой сервер внутри себя
       - PB_HOST=http://0.0.0.0:8090
     volumes:
-      # Оставляем только базу данных, код берется из образа
+      # Только данные базы, код уже внутри образа
       - ./database/pb_data:/pb_data
     restart: "no"
     depends_on:
@@ -52,11 +53,13 @@ services:
     environment:
       - DOCKER_MODE=true
       - NODE_ENV=production
+      # Сервер ходит к базе по сети
       - PB_HOST=http://db:8090
     expose:
       - "3636"
-    # Блок volumes полностью удален, так как он был пуст
+    # Volumes для кода больше не нужны!
     depends_on:
+      # Ждем успешного завершения init
       db-init:
         condition: service_completed_successfully
 
@@ -65,6 +68,7 @@ services:
       context: .
       dockerfile: docker/client/Dockerfile
       args:
+        # Убедитесь, что домен правильный
         - VITE_API_HOST=https://lifeforge-api.digitalkitty.ru
     container_name: lifeforge-client
     restart: unless-stopped
