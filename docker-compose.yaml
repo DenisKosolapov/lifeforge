@@ -32,12 +32,13 @@ services:
     environment:
       - DOCKER_MODE=true
       - PB_DIR=/pb_data
-      - PB_HOST=http://db:8090
+      # ИСПРАВЛЕНО: db-init должен запускать сервер локально, а не стучаться в сеть
+      - PB_HOST=http://0.0.0.0:8090
     volumes:
       - ./database/pb_data:/pb_data
       - ./apps:/app/apps
       - ./locales:/app/locales
-    # Важно: restart: "no" оставляем, чтобы избежать цикла перезагрузок
+    # Оставляем "no", чтобы он не перезапускался бесконечно после успеха
     restart: "no"
     depends_on:
       db:
@@ -54,6 +55,7 @@ services:
     environment:
       - DOCKER_MODE=true
       - NODE_ENV=production
+      # Здесь правильно db:8090, так как сервер ходит к базе по сети
       - PB_HOST=http://db:8090
     expose:
       - "3636"
@@ -69,13 +71,12 @@ services:
       context: .
       dockerfile: docker/client/Dockerfile
       args:
-        # Убедитесь, что здесь ваш актуальный домен API
+        # Убедитесь, что домен указан верно
         - VITE_API_HOST=https://lifeforge-api.digitalkitty.ru
     container_name: lifeforge-client
     restart: unless-stopped
-    # ИЗМЕНЕНИЕ ЗДЕСЬ:
-    # Мы убрали 'ports', так как Coolify сам проксирует внешний трафик.
-    # 'expose' просто сообщает Coolify, что внутри контейнер слушает порт 80.
+    # Порты удалены, чтобы не конфликтовать с Coolify.
+    # Expose говорит Coolify, куда направлять трафик.
     expose:
       - "80"
     depends_on:
