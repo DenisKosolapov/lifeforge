@@ -51,25 +51,15 @@ services:
     env_file:
       - ./env/.env.docker
     environment:
-      - CORS_ORIGIN=*
-      # Вариант 1 (Стандарт SvelteKit Node adapter)
-      - ORIGIN=https://lifeforge.digitalkitty.ru
-      
-      # Вариант 2 (Часто используется в бойлерплейтах)
-      - CLIENT_URL=https://lifeforge.digitalkitty.ru
-      
-      # Вариант 3 (Специфичный для CORS пакетов)
-      - CORS_ORIGIN=https://lifeforge.digitalkitty.ru
-      
-      # Вариант 4 (Иногда бывает JSON-массивом)
-      - ALLOWED_ORIGINS=https://lifeforge.digitalkitty.ru
       - DOCKER_MODE=true
       - NODE_ENV=production
       # Сервер ходит к базе по сети
       - PB_HOST=http://db:8090
     expose:
       - "3636"
-    # Volumes для кода больше не нужны!
+    volumes:
+      - lifeforge_apps:/lifeforge/apps
+      - lifeforge_locales:/lifeforge/locales
     depends_on:
       # Ждем успешного завершения init
       db-init:
@@ -89,3 +79,6 @@ services:
     depends_on:
       server:
         condition: service_started
+volumes:
+  lifeforge_apps:
+  lifeforge_locales:
