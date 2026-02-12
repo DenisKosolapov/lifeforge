@@ -56,6 +56,11 @@ COPY --from=builder /app/shared/package.json ./shared/package.json
 COPY --from=builder /app/packages/lifeforge-server-utils/dist ./packages/lifeforge-server-utils/dist
 COPY --from=builder /app/packages/lifeforge-server-utils/package.json ./packages/lifeforge-server-utils/package.json
 
+# --- ИЗМЕНЕНИЕ: Копируем код приложений и локализаций для генерации миграций ---
+COPY apps /app/apps
+COPY locales /app/locales
+# -----------------------------------------------------------------------------
+
 # Create node_modules symlinks for package resolution
 RUN mkdir -p node_modules/@lifeforge && \
     ln -sf /app/shared node_modules/shared && \
