@@ -32,11 +32,12 @@ services:
     environment:
       - DOCKER_MODE=true
       - PB_DIR=/pb_data
-      - PB_HOST=http://0.0.0.0:8090
+      - PB_HOST=http://db:8090
     volumes:
       - ./database/pb_data:/pb_data
       - ./apps:/app/apps
       - ./locales:/app/locales
+    # Важно: restart: "no" оставляем, чтобы избежать цикла перезагрузок
     restart: "no"
     depends_on:
       db:
@@ -68,11 +69,15 @@ services:
       context: .
       dockerfile: docker/client/Dockerfile
       args:
+        # Убедитесь, что здесь ваш актуальный домен API
         - VITE_API_HOST=https://lifeforge-api.digitalkitty.ru
     container_name: lifeforge-client
     restart: unless-stopped
-    ports:
-      - "80:80"
+    # ИЗМЕНЕНИЕ ЗДЕСЬ:
+    # Мы убрали 'ports', так как Coolify сам проксирует внешний трафик.
+    # 'expose' просто сообщает Coolify, что внутри контейнер слушает порт 80.
+    expose:
+      - "80"
     depends_on:
       server:
         condition: service_started
