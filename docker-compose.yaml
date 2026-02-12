@@ -52,6 +52,17 @@ services:
       - ./env/.env.docker
     environment:
       - CORS_ORIGIN=*
+      # Вариант 1 (Стандарт SvelteKit Node adapter)
+      - ORIGIN=https://lifeforge.digitalkitty.ru
+      
+      # Вариант 2 (Часто используется в бойлерплейтах)
+      - CLIENT_URL=https://lifeforge.digitalkitty.ru
+      
+      # Вариант 3 (Специфичный для CORS пакетов)
+      - CORS_ORIGIN=https://lifeforge.digitalkitty.ru
+      
+      # Вариант 4 (Иногда бывает JSON-массивом)
+      - ALLOWED_ORIGINS=https://lifeforge.digitalkitty.ru
       - DOCKER_MODE=true
       - NODE_ENV=production
       # Сервер ходит к базе по сети
