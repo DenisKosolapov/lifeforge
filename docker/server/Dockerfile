@@ -65,8 +65,13 @@ COPY --from=builder /lifeforge/packages/lifeforge-server-utils/package.json ./pa
 COPY --from=builder /lifeforge/server/package.docker.json ./package.json
 RUN bun install --production
 
-# Create apps directory for module mounting
+# Create apps directory 
 RUN mkdir -p /lifeforge/apps
+
+# --- ИЗМЕНЕНИЕ: Копируем код приложений и локализаций внутрь образа ---
+COPY apps /lifeforge/apps
+COPY locales /lifeforge/locales
+# ---------------------------------------------------------------------
 
 # Copy entrypoint
 COPY docker/server/entrypoint.sh /entrypoint.sh
@@ -79,8 +84,4 @@ EXPOSE 3636
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:3636/ || exit 1
 
-# Modules should be mounted to /lifeforge/apps at runtime:
-#   docker run -v /path/to/modules:/lifeforge/apps lifeforge-server
 ENTRYPOINT ["/entrypoint.sh"]
-
-
