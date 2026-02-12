@@ -23,7 +23,14 @@ app.use(
 // CORS configuration
 app.use(
   cors({
-    origin: CORS_ALLOWED_ORIGINS
+    // Явно разрешаем ваш домен и локалхост (на всякий случай)
+    origin: [
+      'https://lifeforge.digitalkitty.ru', 
+      'http://localhost:3000',
+      'http://localhost:5173',
+      CORS_ALLOWED_ORIGINS
+    ],
+    credentials: true // Разрешаем передачу кук и авторизационных заголовков
   })
 )
 
