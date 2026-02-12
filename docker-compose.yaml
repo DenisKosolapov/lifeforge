@@ -69,7 +69,7 @@ services:
       dockerfile: docker/client/Dockerfile
       args:
         # Убедитесь, что домен правильный
-        - VITE_API_HOST=https://lifeforge-api.digitalkitty.ru
+        - VITE_API_HOST=https://lifeforge.digitalkitty.ru
     container_name: lifeforge-client
     restart: unless-stopped
     expose:
