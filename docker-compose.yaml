@@ -37,6 +37,7 @@ services:
       - ./database/pb_data:/pb_data
       - ./apps:/app/apps
       - ./locales:/app/locales
+    restart: "no"
     depends_on:
       db:
         condition: service_healthy
