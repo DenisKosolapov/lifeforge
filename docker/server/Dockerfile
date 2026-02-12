@@ -19,6 +19,9 @@ RUN --mount=type=cache,target=/root/.bun/install/cache \
 # Build shared package
 RUN cd /lifeforge/shared && bun run build
 
+# !!! NEW !!! Сборка CLI инструментов (forge)
+RUN cd /lifeforge/tools && bun run build
+
 # Build @lifeforge/log package
 RUN cd /lifeforge/packages/lifeforge-log && bun run build
 
@@ -52,6 +55,9 @@ COPY --from=builder /lifeforge/server/dist ./server/dist
 # Copy shared package
 COPY --from=builder /lifeforge/shared/dist ./shared/dist
 COPY --from=builder /lifeforge/shared/package.json ./shared/package.json
+
+# !!! NEW !!! Копируем собранный CLI инструмент
+COPY --from=builder /lifeforge/tools/dist ./tools/dist
 
 # Copy @lifeforge/log package
 COPY --from=builder /lifeforge/packages/lifeforge-log/dist ./packages/lifeforge-log/dist
