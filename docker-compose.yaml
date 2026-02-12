@@ -68,7 +68,7 @@ services:
       context: .
       dockerfile: docker/client/Dockerfile
       args:
-        - VITE_API_HOST=/api
+        - VITE_API_HOST=https://lifeforge-api.digitalkitty.ru
     container_name: lifeforge-client
     restart: unless-stopped
     ports:
